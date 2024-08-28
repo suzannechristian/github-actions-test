@@ -42,6 +42,10 @@ jobs:
         with:
           tag: service-v${{ steps.version-id.outputs.version }}
 
+      - name: Update Readme of service
+        run: |
+          echo testing >> service/README.txt
+
       - name: Create Release
         uses: actions/create-release@v1
         if: "steps.checkTag.outputs.exists == 'false'"
