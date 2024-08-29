@@ -45,6 +45,7 @@ jobs:
       - name: Update Readme of service
         run: |
           echo testing >> service/README.txt
+          cat service/README.txt
 
       - name: Create Release
         uses: actions/create-release@v1
