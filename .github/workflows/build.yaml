@@ -36,18 +36,12 @@ jobs:
       - name: Print version
         run: echo ${{ steps.version-id.outputs.version }}
 
-      - name: Check if tag exists
-        uses: mukunku/tag-exists-action@v1.4.0
-        id: checkTag
-        with:
-          tag: service-v${{ steps.version-id.outputs.version }}
-
       - name: Update Readme of service
         run: |
           echo testing >> service/README.txt
           cat service/README.txt
 
-      - name: Update env.conf of deployments
+      - name: Update README
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
@@ -59,12 +53,20 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check if tag exists
+        uses: mukunku/tag-exists-action@v1.4.0
+        id: checkTag
+        with:
+          tag: service-v${{ steps.version-id.outputs.version }}
+          
       - name: Create Release
         uses: actions/create-release@v1
         if: "steps.checkTag.outputs.exists == 'false'"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          files: |
+            service/README.txt
           tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
           release_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
           draft: false
