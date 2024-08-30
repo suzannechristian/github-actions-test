@@ -36,38 +36,35 @@ jobs:
       - name: Print version
         run: echo ${{ steps.version-id.outputs.version }}
 
-      - name: Update Readme of service
-        run: |
-          echo testing >> service/README.txt
-          cat service/README.txt
-
-      - name: Update README
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Github Action"
-          git add service/README.txt
-          git commit -m "Update service readme through github actions"
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check if tag exists
         uses: mukunku/tag-exists-action@v1.4.0
         id: checkTag
         with:
           tag: service-v${{ steps.version-id.outputs.version }}
-          
+
       - name: Create Release
         uses: actions/create-release@v1
         if: "steps.checkTag.outputs.exists == 'false'"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: |
-            service/README.txt
           tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
           release_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
           draft: false
           prerelease: false
+
+      - name: Update Readme and create artifact
+        run: |
+          echo testing_service_${{ steps.version-id.outputs.version }} >> service/README.txt
+          echo testing_helm_${{ steps.version-id.outputs.version }} >> helm/README.txt
+          cat service/README.txt
+          cat helm/README.txt
+          zip -r artifacts_${{ steps.version-id.outputs.version }}.zip */
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts_${{ steps.version-id.outputs.version }}.zip
+          asset_name: artifacts_${{ steps.version-id.outputs.version }}.zip
+          asset_content_type: application/zip
