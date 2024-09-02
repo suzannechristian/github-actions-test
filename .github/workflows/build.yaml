@@ -43,7 +43,7 @@ jobs:
         run: |
           timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
           echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
-          echo "TAG_NAME=${{ env.TAG_PREFIX }}${{ steps.drz-hivemq-platform-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+          echo "TAG_NAME=${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}" >> "$GITHUB_OUTPUT"
 
       - name: Create artifact
         id: create-artifact
@@ -53,7 +53,7 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(service-v${{ steps.version-id.outputs.version }}, 'refs/tags/')
+        if: startsWith(${{ steps.github-output-local.outputs.TAG_NAME }}, 'refs/tags/')
         with:
           files: ${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
           tag_name: ${{ steps.github-output-local.outputs.TAG_NAME }}
