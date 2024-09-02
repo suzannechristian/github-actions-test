@@ -47,10 +47,7 @@ jobs:
       - name: Update Readme and create artifact
         id: create-artifact
         run: |
-          echo testing_service_${{ steps.version-id.outputs.version }} >> service/README.txt
-          echo testing_helm_${{ steps.version-id.outputs.version }} >> helm/README.txt
-          cat service/README.txt
-          cat helm/README.txt
+          sed -i "s/^HELM_VERSION=.*/HELM_VERSION=${{ steps.version-id.outputs.version }}/" ./helm/env/*/helm.conf
           timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
           echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
           zip -r -v artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip */
