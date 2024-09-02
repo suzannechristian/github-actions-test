@@ -59,7 +59,9 @@ jobs:
           done
           
           ls -l *
-          ls -l .*_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
+          
+          artifacts=$(find . -type f -name "*${{ steps.github-output-local.outputs.ARTIFACT_NAME }}")
+          echo $artifacts
           tree
 
       - name: Create Release
