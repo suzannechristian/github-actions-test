@@ -52,8 +52,10 @@ jobs:
           zip -r ${{ steps.github-output-local.outputs.ARTIFACT_NAME }} */
           
           for dir in ./helm/env/*; do
-            zip -r "${dir%/}_${ARTIFACT_NAME}.zip" "$dir"
+            zip -r "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}.zip" "$dir"
           done
+          
+          ls -l *${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
