@@ -60,7 +60,9 @@ jobs:
           
           ls -l *
           
-          echo "ARTIFACTS=$(find . -type f -name "*${{ steps.github-output-local.outputs.ARTIFACT_NAME }}")" >> "$GITHUB_OUTPUT"
+          get_artifacts=$(find . -type f -name "*${{ steps.github-output-local.outputs.ARTIFACT_NAME }}")
+          echo {get_artifacts}
+          echo "ARTIFACTS=${get_artifacts}" >> "$GITHUB_OUTPUT"
           tree
           echo create artifact completed
 
