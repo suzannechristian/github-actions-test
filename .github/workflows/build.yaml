@@ -7,11 +7,7 @@ on:
       - 'master'
 
 env:
-  run: |
-    timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
-
   TAG_PREFIX: service-v
-  TIMESTAMP: $(timestamp)
 
 jobs:
   build:
@@ -49,18 +45,21 @@ jobs:
           tag: service-v${{ steps.version-id.outputs.version }}
 
       - name: Update Readme and create artifact
+        id: create-artifact
         run: |
           echo testing_service_${{ steps.version-id.outputs.version }} >> service/README.txt
           echo testing_helm_${{ steps.version-id.outputs.version }} >> helm/README.txt
           cat service/README.txt
           cat helm/README.txt
+          timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
+          echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
           zip -r artifacts_${{ steps.version-id.outputs.version }}_${{ env.TIMESTAMP }}.zip */
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         if: startsWith(service-v${{ steps.version-id.outputs.version }}, 'refs/tags/')
         with:
-          files: artifacts_${{ steps.version-id.outputs.version }}_${{ env.TIMESTAMP }}.zip
+          files: ${{ steps.create-artifact.outputs.ARTIFACT_NAME }}
           tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
 #        with:
 #          tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
