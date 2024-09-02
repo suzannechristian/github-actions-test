@@ -50,6 +50,10 @@ jobs:
         run: |
           sed -i "s/^HELM_VERSION=.*/HELM_VERSION=\"${{ steps.version-id.outputs.version }}\"/" ./helm/env/*/helm.conf
           zip -r ${{ steps.github-output-local.outputs.ARTIFACT_NAME }} */
+          
+          for dir in ./helm/env/*; do
+            zip -r "${dir%/}_${ARTIFACT_NAME}.zip" "$dir"
+          done
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
