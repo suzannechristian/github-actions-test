@@ -52,6 +52,8 @@ jobs:
           zip -r ${{ steps.github-output-local.outputs.ARTIFACT_NAME }} */
           
           for dir in ./helm/env/*; do
+            echo $dir
+            echo "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}.zip"
             zip -r "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}.zip" "$dir"
           done
           
