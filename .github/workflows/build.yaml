@@ -53,8 +53,7 @@ jobs:
           cat helm/README.txt
           timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
           echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
-          echo $ARTIFACT_NAME
-          zip -r -v $ARTIFACT_NAME */
+          zip -r -v artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip */
           ls -l
 
       - name: Create Release
