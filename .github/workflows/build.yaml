@@ -53,11 +53,12 @@ jobs:
           
           for dir in ./helm/env/*; do
             echo $dir
-            echo "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}.zip"
-            zip -r "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}.zip" "$dir"
+            echo "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}"
+            zip -r "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}" "$dir"
           done
           
           ls -l *
+          tree
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
