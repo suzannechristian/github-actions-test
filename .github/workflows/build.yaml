@@ -68,5 +68,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(${{ steps.github-output-local.outputs.TAG_NAME }}, 'refs/tags/')
         with:
-          files: ${{ steps.github-output-local.outputs.ARTIFACTS }}
+          files: ${{ steps.create-artifact.outputs.ARTIFACTS }}
           tag_name: ${{ steps.github-output-local.outputs.TAG_NAME }}
