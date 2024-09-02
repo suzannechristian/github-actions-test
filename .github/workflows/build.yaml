@@ -8,6 +8,7 @@ on:
 
 env:
   TAG_PREFIX: service-v
+  TIMESTAMP: $(date +'%Y-%m-%dT%H-%M-%S')
 
 jobs:
   build:
@@ -34,7 +35,9 @@ jobs:
           tag_prefix: ${{ env.TAG_PREFIX }}
 
       - name: Print version
-        run: echo ${{ steps.version-id.outputs.version }}
+        run: |
+          echo ${{ steps.version-id.outputs.version }}
+          echo ${{ env.TIMESTAMP }}
 
       - name: Check if tag exists
         uses: mukunku/tag-exists-action@v1.4.0
@@ -48,7 +51,7 @@ jobs:
           echo testing_helm_${{ steps.version-id.outputs.version }} >> helm/README.txt
           cat service/README.txt
           cat helm/README.txt
-          zip -r artifacts_${{ steps.version-id.outputs.version }}.zip */
+          zip -r artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip */
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
