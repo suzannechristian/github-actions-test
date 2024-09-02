@@ -58,8 +58,8 @@ jobs:
             zip -r "${dir_val}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}" "$dir"
           done
           
-          ls -l .*_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
           ls -l *
+          ls -l .*_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
           tree
 
       - name: Create Release
