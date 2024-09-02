@@ -55,6 +55,7 @@ jobs:
         if: startsWith(service-v${{ steps.version-id.outputs.version }}, 'refs/tags/')
         with:
           files: artifacts_${{ steps.version-id.outputs.version }}.zip
+          tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
 #        with:
 #          tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
 ##          release_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
