@@ -58,7 +58,7 @@ jobs:
             zip -r "${dir_val}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}" "$dir"
           done
           
-          ls -l *{{ steps.github-output-local.outputs.ARTIFACT_NAME }}
+          ls -l .*_{{ steps.github-output-local.outputs.ARTIFACT_NAME }}
           ls -l *
           tree
 
