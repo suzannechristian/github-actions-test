@@ -38,44 +38,22 @@ jobs:
           echo ${{ steps.version-id.outputs.version }}
           echo ${{ env.TIMESTAMP }}
 
-      - name: Check if tag exists
-        uses: mukunku/tag-exists-action@v1.4.0
-        id: checkTag
-        with:
-          tag: service-v${{ steps.version-id.outputs.version }}
+      - name: Generate tag name and artifact name
+        id: github-output-local
+        run: |
+          timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
+          echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
+          echo "TAG_NAME=${{ env.TAG_PREFIX }}${{ steps.drz-hivemq-platform-version.outputs.version }}" >> "$GITHUB_OUTPUT"
 
-      - name: Update Readme and create artifact
+      - name: Create artifact
         id: create-artifact
         run: |
           sed -i "s/^HELM_VERSION=.*/HELM_VERSION=\"${{ steps.version-id.outputs.version }}\"/" ./helm/env/*/helm.conf
-          timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
-          echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
-          zip -r -v artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip */
-          ls -l
+          zip -r ${{ steps.github-output-local.outputs.ARTIFACT_NAME }} */
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         if: startsWith(service-v${{ steps.version-id.outputs.version }}, 'refs/tags/')
         with:
-          files: ${{ steps.create-artifact.outputs.ARTIFACT_NAME }}
-          tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
-#        with:
-#          tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
-##          release_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
-#          draft: false
-#          prerelease: false
-
-
-#      - name: Get the upload URL for relase
-#        run: |
-#          echo ${{ steps.create_release.outputs.upload_url }}
-#
-#      - name: Create artifact and upload to release
-#        uses: actions/upload-release-asset@v1
-#        env:
-#          GITHUB_TOKEN: ${{ github.token }}
-#        with:
-#          upload_url: ${{ steps.create_release.outputs.upload_url }}
-#          asset_path: ./artifacts_${{ steps.version-id.outputs.version }}.zip
-#          asset_name: artifacts_${{ steps.version-id.outputs.version }}.zip
-#          asset_content_type: application/zip
+          files: ${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
+          tag_name: ${{ steps.github-output-local.outputs.TAG_NAME }}
