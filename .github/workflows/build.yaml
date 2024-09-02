@@ -53,10 +53,12 @@ jobs:
           
           for dir in ./helm/env/*; do
             echo $dir
-            echo "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}"
-            zip -r "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}" "$dir"
+            dir_val=$(basename ${dir})
+            echo "${dir_val}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}"
+            zip -r "${dir_val}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}" "$dir"
           done
           
+          ls -l *{{ steps.github-output-local.outputs.ARTIFACT_NAME }}
           ls -l *
           tree
 
