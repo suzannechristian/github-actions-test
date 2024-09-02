@@ -51,13 +51,13 @@ jobs:
           echo testing_helm_${{ steps.version-id.outputs.version }} >> helm/README.txt
           cat service/README.txt
           cat helm/README.txt
-          zip -r artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip */
+          zip -r artifacts_${{ steps.version-id.outputs.version }}_${{ env.TIMESTAMP }}.zip */
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         if: startsWith(service-v${{ steps.version-id.outputs.version }}, 'refs/tags/')
         with:
-          files: artifacts_${{ steps.version-id.outputs.version }}.zip
+          files: artifacts_${{ steps.version-id.outputs.version }}_${{ env.TIMESTAMP }}.zip
           tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
 #        with:
 #          tag_name: ${{ env.TAG_PREFIX }}${{ steps.version-id.outputs.version }}
