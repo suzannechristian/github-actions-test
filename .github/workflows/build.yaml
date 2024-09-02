@@ -64,7 +64,7 @@ jobs:
           echo ${get_artifacts}
           {
             echo 'ARTIFACTS<<EOF'
-            ${get_artifacts}"
+            ${get_artifacts}
             echo EOF
           } >> "$GITHUB_OUTPUT"
           tree
