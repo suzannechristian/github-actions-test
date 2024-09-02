@@ -54,6 +54,7 @@ jobs:
           timestamp=$(date +'%Y-%m-%dT%H-%M-%S')
           echo "ARTIFACT_NAME=artifacts_${{ steps.version-id.outputs.version }}_$timestamp.zip" >> "$GITHUB_OUTPUT"
           zip -r $ARTIFACT_NAME */
+          ls -l
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
