@@ -55,7 +55,7 @@ jobs:
             zip -r "${dir%/}_${{ steps.github-output-local.outputs.ARTIFACT_NAME }}.zip" "$dir"
           done
           
-          ls -l *${{ steps.github-output-local.outputs.ARTIFACT_NAME }}
+          ls -l *
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
