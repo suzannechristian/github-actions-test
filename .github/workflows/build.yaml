@@ -23,7 +23,7 @@ jobs:
         with:
             fetch-depth: 0
 
-      - if: master == 'master'
+      - if: 'master' == 'master'
         name: master-version
         id: master-version-id
         uses: paulhatch/semantic-version@v5.3.0
