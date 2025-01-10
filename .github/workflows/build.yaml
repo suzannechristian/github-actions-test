@@ -35,7 +35,7 @@ jobs:
           bump_each_commit: true
           tag_prefix: ${{ env.TAG_PREFIX }}
 
-      - if: ${BRANCH_NAME} != 'master'
+      - if: ${{ env.BRANCH_NAME }} != 'master'
         name: version
         id: version-id
         uses: paulhatch/semantic-version@v5.3.0
