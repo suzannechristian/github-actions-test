@@ -8,6 +8,7 @@ on:
 
 env:
   TAG_PREFIX: service-v
+  BRANCH_NAME: ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
 
 jobs:
   build:
@@ -37,6 +38,7 @@ jobs:
         run: |
           echo ${{ steps.version-id.outputs.version }}
           echo ${{ env.TIMESTAMP }}
+          echo ${{ env.BRANCH_NAME }}
 
       - name: Generate tag name and artifact name
         id: github-output-local
