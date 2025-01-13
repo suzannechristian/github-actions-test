@@ -25,8 +25,8 @@ jobs:
         with:
             fetch-depth: 0
 
-      - if: ${{ env.BRANCH_NAME == 'master' }}
-        name: master-version
+      - name: master-version
+        if: ${{ env.BRANCH_NAME == 'master' }}
         id: master-version-id
         uses: paulhatch/semantic-version@v5.3.0
         with:
@@ -37,8 +37,8 @@ jobs:
           bump_each_commit: true
           tag_prefix: ${{ env.TAG_PREFIX }}
 
-      - if: ${{ env.BRANCH_NAME != 'master' }}
-        name: version
+      - name: version
+        if: ${{ env.BRANCH_NAME != 'master' }}
         id: version-id
         uses: paulhatch/semantic-version@v5.3.0
         with:
